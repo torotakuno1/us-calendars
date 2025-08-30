@@ -1,5 +1,5 @@
 # scripts/ics_common.py
-import os
+
 import hashlib
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo  # tzdata は requirements.txt に追加済み前提
@@ -60,8 +60,8 @@ def vevent_with_time(start_dt, end_dt, summary, description=""):
         "END:VEVENT\r\n"
     )
 
+import os
 def save_ics(path, content):
-    # ★重要：書き出し前に必ずフォルダを作る（今回のエラー対策）
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     if not content.endswith("\r\n"):
         content += "\r\n"
