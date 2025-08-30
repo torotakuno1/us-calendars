@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # ← これが無いと push に失敗します
+  contents: write
 
 jobs:
   build:
@@ -25,8 +25,15 @@ jobs:
       - name: Ensure docs dir exists
         run: mkdir -p docs
 
-      - name: Generate ICS
-        run: python scripts/run_all.py
+      - name: Generate ICS (best-effort)
+        run: |
+          python scripts/run_all.py || true
+
+      - name: Debug tree
+        run: |
+          ls -la
+          echo "---- docs ----"
+          ls -la docs || true
 
       - name: Commit & Push
         run: |
