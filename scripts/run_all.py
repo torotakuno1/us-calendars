@@ -4,7 +4,7 @@ os.makedirs("docs", exist_ok=True)
 SCRIPTS = [
     "make_fomc_ics.py",
     # "make_treasury_auctions_ics.py",  # ← 入札は後で直すまで停止
-    "make_opex_ics.py",                # ★ OPEX を必ず実行
+    # "make_opex_ics.py",               # ←OPEXは一旦停止
     "make_vix_ics.py",
     "make_weekly_ui_ics.py",
     "make_g17_ics.py",
