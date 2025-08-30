@@ -1,9 +1,9 @@
 # scripts/make_opex_ics.py（確実版）
-import os, csv
+import csv
 from datetime import date
 from ics_common import ics_header, ics_footer, vevent_all_day, save_ics, third_friday
 
-EXCEPTIONS_CSV = "data/opex_exceptions_2025.csv"
+EXCEPTIONS_CSV = "data/opex_exceptions_2025.csv"  # 空でもOK
 
 def load_exceptions(path):
     ex = {}
@@ -25,8 +25,11 @@ def build_ics(year):
     for m in range(1, 13):
         ym = f"{year}-{m:02d}"
         exp = ex.get(ym, third_friday(year, m))
-        out.append(vevent_all_day(exp, "US Equity/ETF Options Expiration",
-                                  "Standard monthly expiration (3rd Friday)."))
+        out.append(vevent_all_day(
+            exp,
+            "US Equity/ETF Options Expiration",
+            "Standard monthly expiration (3rd Friday); holiday exceptions via CSV."
+        ))
     out.append(ics_footer())
     return "".join(out)
 
