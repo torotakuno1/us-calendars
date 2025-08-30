@@ -1,4 +1,5 @@
 # scripts/ics_common.py
+import os
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import hashlib, re
@@ -61,8 +62,8 @@ def escape_text(s: str) -> str:
     return (s or "").replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;").replace("\n", "\\n")
 
 def save_ics(path, content):
+     os.makedirs(os.path.dirname(path), exist_ok=True)
     if not content.endswith("\r\n"):
-        # ensure trailing CRLF
         content += "\r\n"
     with open(path, "w", encoding="utf-8", newline="\r\n") as f:
         f.write(content)
