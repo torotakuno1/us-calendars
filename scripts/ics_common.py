@@ -1,8 +1,8 @@
-# scripts/ics_common.py
+# scripts/ics_common.py （丸ごと貼り付け）
 import os
+import hashlib
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-import hashlib, re
+from zoneinfo import ZoneInfo  # tzdata は requirements.txt に入れておく
 
 ET = ZoneInfo("America/New_York")
 JST = ZoneInfo("Asia/Tokyo")
@@ -16,6 +16,9 @@ def dtstamp():
 def uid(*parts):
     key = "|".join(parts).encode("utf-8")
     return hashlib.md5(key).hexdigest() + "@custom-ics"
+
+def escape_text(s: str) -> str:
+    return (s or "").replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;").replace("\n", "\\n")
 
 def ics_header(name="Calendar"):
     return (
@@ -45,7 +48,6 @@ def vevent_all_day(date_obj, summary, description=""):
     )
 
 def vevent_with_time(start_dt, end_dt, summary, description=""):
-    # start_dt and end_dt should be timezone-aware
     u = uid(start_dt.isoformat(), summary)
     return (
         "BEGIN:VEVENT\r\n"
@@ -58,28 +60,10 @@ def vevent_with_time(start_dt, end_dt, summary, description=""):
         "END:VEVENT\r\n"
     )
 
-def escape_text(s: str) -> str:
-    return (s or "").replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;").replace("\n", "\\n")
-
 def save_ics(path, content):
-     os.makedirs(os.path.dirname(path), exist_ok=True)
+    # ★重要：書き出し前に必ずフォルダを作る
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     if not content.endswith("\r\n"):
         content += "\r\n"
     with open(path, "w", encoding="utf-8", newline="\r\n") as f:
         f.write(content)
-
-def third_friday(year, month):
-    # Return date of the 3rd Friday for given month
-    import calendar, datetime as dt
-    c = calendar.Calendar(firstweekday=calendar.MONDAY)
-    fridays = [d for d in c.itermonthdates(year, month) if d.weekday()==4 and d.month==month]
-    return fridays[2]
-
-def nth_weekday_of_month(year, month, weekday, n):
-    # weekday: Monday=0 ... Sunday=6
-    import calendar, datetime as dt
-    c = calendar.Calendar(firstweekday=calendar.MONDAY)
-    days = [d for d in c.itermonthdates(year, month) if d.weekday()==weekday and d.month==month]
-    if n-1 < len(days):
-        return days[n-1]
-    return None
