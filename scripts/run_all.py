@@ -3,8 +3,8 @@ os.makedirs("docs", exist_ok=True)
 
 SCRIPTS = [
     "make_fomc_ics.py",
-    # "make_treasury_auctions_ics.py",  # ← 404のため一時停止
-    "make_opex_ics.py",
+    # "make_treasury_auctions_ics.py",  # ← 入札は後で直すまで停止
+    "make_opex_ics.py",                # ★ OPEX を必ず実行
     "make_vix_ics.py",
     "make_weekly_ui_ics.py",
     "make_g17_ics.py",
@@ -21,4 +21,4 @@ for s in SCRIPTS:
 
 if failures:
     print("Completed with warnings. Failed:", ", ".join(failures), flush=True)
-sys.exit(0)
+sys.exit(0)   # 失敗があっても他の.icsは出す
