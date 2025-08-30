@@ -1,0 +1,4 @@
+# One ticker per line (optional; used by make_earnings_ics.py)
+AAPL
+MSFT
+NVDA
